@@ -1,17 +1,18 @@
 from select import select
 
 from flask import Blueprint, request, flash, redirect, url_for, render_template, current_app
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import login_required, current_user
 
-from models import User, Movie
-from extensions import login_manager,db
+from watchlist.extensions import db
 # 注册蓝本，对路由分组
+from watchlist.models import Movie, User
+
 main_bp = Blueprint('main', __name__)
 
 
 @main_bp.route('/',methods=['GET','POST']) # 表示同时接受 GET 和 POST 请求。
 def index():
-    current_app.logger.debug('Visited index page')
+    current_app.logger.debug('11111111111111111111111111 Visited index page')
     if request.method=='POST':
         if not current_user.is_authenticated:  # 如果当前用户未认证
             return redirect(url_for('main.index'))  # 重定向到主页
@@ -25,7 +26,7 @@ def index():
         db.session.commit()
         flash('Item created.')
         return redirect(url_for('main.index'))
-    movies = db.session.execute(select(Movie)).scalars().all()
+    movies=  Movie.query.all()
     return render_template('index.html', movies=movies)
 
 
@@ -76,3 +77,21 @@ def delete(movie_id):
     db.session.commit()  # 提交数据库会话
     flash('Item deleted.')
     return redirect(url_for('main.index'))  # 重定向回主页
+
+@main_bp.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    if request.method == 'POST':
+        name = request.form['name']
+
+        if not name or len(name) > 20:
+            flash('Invalid input.')
+            return redirect(url_for('main.settings'))
+
+        user = db.session.get(User, current_user.id)
+        user.name = name
+        db.session.commit()
+        flash('Settings updated.')
+        return redirect(url_for('main.index'))
+
+    return render_template('settings.html')

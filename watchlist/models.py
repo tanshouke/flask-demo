@@ -4,7 +4,8 @@ from sqlalchemy.orm import Mapped, mapped_column
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
-from extensions import db
+from watchlist.extensions import db
+
 
 class User(db.Model,UserMixin):
     __tablename__ = 'user' # 定义表名称
@@ -24,3 +25,5 @@ class Movie(db.Model):  # 表名将会是 movie
     id: Mapped[int] = mapped_column(primary_key=True)  # 主键
     title: Mapped[str] = mapped_column(String(60))  # 电影标题
     year: Mapped[str] = mapped_column(String(4))  # 电影年份
+
+

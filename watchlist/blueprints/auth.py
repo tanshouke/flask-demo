@@ -1,10 +1,9 @@
-from select import select
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask_login import login_user, login_required, logout_user
+from sqlalchemy import select
 
-from flask import Blueprint, request, flash, redirect, url_for, render_template
-from flask_login import login_user, logout_user, login_required, current_user
-
-from app import User
-from extensions import login_manager,db
+from watchlist.models import User
+from watchlist.extensions import db
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -18,6 +17,8 @@ def login():
         if not username or not password:
             flash('Invalid input.')
             return redirect(url_for('auth.login'))
+        else:
+            print("验证登录：",username,password)
 
         user = db.session.execute(select(User).filter_by(username=username)).scalar()
         # 验证密码是否一致
