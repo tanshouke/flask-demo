@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM jxe-acr-registry.cn-shenzhen.cr.aliyuncs.com/ops/v2-base/python:3.9.10
 WORKDIR /Project/demo
 
 COPY requirements.txt ./
