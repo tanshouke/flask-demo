@@ -9,6 +9,7 @@ flask --app app.py run --debug
 
 # 发布
 pip freeze > requirements.txt
+pip install -r  requirements.txt
 docker build -t test:v3  .
 docker rm -f flask-demo 
 docker run -itd --name flask-demo -p 5000:80  test:v3
