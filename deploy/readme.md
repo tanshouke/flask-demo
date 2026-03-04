@@ -3,6 +3,10 @@
 python -m venv .venv
 pip install -r  requirements.txt
 
+# 启动
+flask --app start.py run --debug
+flask --app app.py run --debug
+
 # 发布
 pip freeze > requirements.txt
 docker build -t test:v3  .
